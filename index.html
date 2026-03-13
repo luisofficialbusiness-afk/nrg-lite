@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NRG Games</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  
+  --bg-primary: #0a0a0a;
+  --bg-secondary: #0a1f3f;
+  --bg-gradient-1: #0a0a0a;
+  --bg-gradient-2: #0a1f3f;
+  --bg-gradient-3: #001f4f;
+  --bg-gradient-4: #0a0a0a;
+
+  --card-bg: #1a1a1a;
+  --card-hover-bg: #007bff;
+  --card-text: white;
+  --btn-bg: #007bff;
+  --btn-text: white;
+  --btn-hover-bg: #005bb5;
+
+  --sidebar-bg: rgba(10, 18, 35, 0.85);
+  --sidebar-border: rgba(0, 229, 255, 0.25);
+  --sidebar-shadow: rgba(0, 229, 255, 0.25);
+  --nav-icon-color: #00e5ff;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Orbitron', sans-serif;
+}
+
+body {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(-45deg, var(--bg-gradient-1), var(--bg-gradient-2), var(--bg-gradient-3), var(--bg-gradient-4));
+  background-size: 400% 400%;
+  animation: gradientBG 15s ease infinite;
+}
+
+@keyframes gradientBG {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+h1.logo {
+  font-size: 5rem;
+  margin: 30px 0;
+  text-align: center;
+  color: var(--card-text);
+}
+
+.card-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+  justify-content: center;
+}
+
+.card {
+  background-color: var(--card-bg);
+  width: 160px;
+  height: 220px;
+  border-radius: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  transition: all 0.3s ease;
+  position: relative;
+  cursor: pointer;
+  overflow: hidden;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+  padding-bottom: 15px;
+}
+
+.card:hover {
+  background-color: var(--card-hover-bg);
+  box-shadow: 0 0 20px var(--btn-bg);
+  transform: translateY(-5px);
+}
+
+.card-img {
+  width: 100%;
+  height: 120px;
+  object-fit: cover;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+}
+
+.card .text {
+  font-size: 1.2rem;
+  font-weight: bold;
+  text-align: center;
+  margin-top: auto;
+  color: var(--card-text);
+  transition: opacity 0.3s ease;
+}
+
+.card:hover .text {
+  opacity: 0; 
+}
+
+.play-btn {
+  position: absolute;
+  bottom: 15px;
+  padding: 8px 20px;
+  background-color: var(--btn-bg);
+  color: var(--btn-text);
+  border: none;
+  border-radius: 10px;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.card:hover .play-btn {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.iframe-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--bg-primary);
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  z-index: 1000;
+}
+
+.iframe-buttons {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin: 20px 0 10px 0;
+}
+
+.iframe-buttons button {
+  padding: 10px 25px;
+  background-color: var(--card-bg);
+  color: var(--card-text);
+  border: none;
+  border-radius: 10px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+}
+
+.iframe-buttons button:hover {
+  background-color: var(--btn-bg);
+  box-shadow: 0 0 15px var(--btn-bg);
+  transform: translateY(-2px);
+}
+
+.game-iframe {
+  width: 90%;
+  height: 70%;
+  border: none;
+  border-radius: 15px;
+  box-shadow: 0 0 20px rgba(0, 123, 255, 0.5);
+}
+
+.bottom-sidebar {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 18px;
+  padding: 14px 26px;
+
+  background: var(--sidebar-bg);
+  backdrop-filter: blur(14px);
+
+  border-radius: 60px;
+  border: 1px solid var(--sidebar-border);
+  box-shadow: 0 0 30px var(--sidebar-shadow);
+
+  z-index: 9999;
+}
+
+.nav-icon {
+  width: 48px;
+  height: 48px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 14px;
+  cursor: pointer;
+
+  font-size: 22px;
+  color: var(--nav-icon-color);
+
+  transition: all 0.25s ease;
+}
+
+.nav-icon:hover {
+  background: linear-gradient(135deg, var(--btn-bg), #0066ff);
+  color: #000;
+  transform: translateY(-6px);
+  box-shadow: 0 0 20px var(--btn-bg);
+}
+
+.nav-icon.active {
+  background: linear-gradient(135deg, var(--btn-bg), #0066ff);
+  color: #000;
+  box-shadow: 0 0 20px var(--btn-bg);
+}
+
+</style>
+</head>
+<body>
+
+<h1 class="logo">NRG</h1>
+
+
+<div class="card-container">
+  <div class="card" data-game="games/1v1.LoL.html">
+    <img src="images/1v1-lol.png" alt="1v1 LoL" class="card-img">
+    <div class="text">1v1 LoL</div>
+    <button class="play-btn">▶ Play</button>
+  </div>
+
+  <div class="card" data-game="games/Bank Robbery.html">
+    <img src="images/Bank Robbery.png" alt="Game 2" class="card-img">
+    <div class="text">Bank Robbery</div>
+    <button class="play-btn">▶ Play</button>
+  </div>
+
+  <div class="card" data-game="games/CircloO.html">
+    <img src="images/CircloO.png" alt="Game 3" class="card-img">
+    <div class="text">CircloO</div>
+    <button class="play-btn">▶ Play</button>
+  </div>
+
+ <div class="card" data-game="games/Clash Of Vikings.html">
+    <img src="images/Clash Of Vikings.png" alt="Game 3" class="card-img">
+    <div class="text">Clash Of Vikings</div>
+    <button class="play-btn">▶ Play</button>
+  </div>
+
+ <div class="card" data-game="games/Crossy Road.html">
+    <img src="images/Crossy Road.png" alt="Game 3" class="card-img">
+    <div class="text">Crossy Road</div>
+    <button class="play-btn">▶ Play</button>
+  </div>
+
+ <div class="card" data-game="games/Death Run 3D.html">
+    <img src="images/Death Run 3D.png" alt="Game 3" class="card-img">
+    <div class="text">Death Run 3D</div>
+    <button class="play-btn">▶ Play</button>
+  </div>
+
+ <div class="card" data-game="games/Escape Road.html">
+    <img src="images/Escape Road.png" alt="Game 3" class="card-img">
+    <div class="text">Escape Road</div>
+    <button class="play-btn">▶ Play</button>
+  </div>
+
+ <div class="card" data-game="games/Find the Alien.html">
+    <img src="images/Find the Alien.png" alt="Game 3" class="card-img">
+    <div class="text">Find the Alien</div>
+    <button class="play-btn">▶ Play</button>
+  </div>
+
+ <div class="card" data-game="games/Fitness Empire.html">
+    <img src="images/FItness Empire.png" alt="Game 3" class="card-img">
+    <div class="text">Fitness Empire</div>
+    <button class="play-btn">▶ Play</button>
+  </div>
+
+  <div class="card" data-game="games/Antonblast.html">
+    <img src="images/Antonblast.png" alt="Game 3" class="card-img">
+    <div class="text">Antonblast</div>
+    <button class="play-btn">▶ Play</button>
+  </div>
+
+  <div class="card" data-game="games/Bad Parenting 1.html">
+    <img src="images/Bad Parenting 1.png" alt="Game 3" class="card-img">
+    <div class="text">Bad Parenting 1</div>
+    <button class="play-btn">▶ Play</button>
+  </div>
+
+  <div class="card" data-game="games/Bendy and the Ink Machine.html">
+    <img src="images/Bendy and the Ink Machine.png" alt="Game 3" class="card-img">
+    <div class="text">Bendy and the Ink Machine</div>
+    <button class="play-btn">▶ Play</button>
+  </div>
+
+  <div class="card" data-game="games/Buckshot Roulette.html">
+    <img src="images/Buckshot Roulette.png" alt="Game 3" class="card-img">
+    <div class="text">Buckshot Roulette</div>
+    <button class="play-btn">▶ Play</button>
+  </div>
+
+  <div class="card" data-game="games/Celeste.html">
+    <img src="images/Celeste.png" alt="Game 3" class="card-img">
+    <div class="text">Celeste</div>
+    <button class="play-btn">▶ Play</button>
+  </div>
+
+  <div class="card" data-game="games/Clover Pit.html">
+    <img src="images/Clover Pit.png" alt="Game 3" class="card-img">
+    <div class="text">Clover Pit</div>
+    <button class="play-btn">▶ Play</button>
+  </div>
+
+  <div class="card" data-game="games/Cuphead.html">
+    <img src="images/Cuphead.png" alt="Game 3" class="card-img">
+    <div class="text">Cuphead</div>
+    <button class="play-btn">▶ Play</button>
+  </div>
+
+  <div class="card" data-game="games/Five Nights at Epsteins.html">
+    <img src="images/Five Nights at Epsteins.png" alt="Game 3" class="card-img">
+    <div class="text">FNAE</div>
+    <button class="play-btn">▶ Play</button>
+  </div>
+
+    <div class="card" data-game="games/Bad Ice Cream.html">
+    <img src="images/Bad Ice Cream.png" alt="Game 3" class="card-img">
+    <div class="text">Bad Ice Cream</div>
+    <button class="play-btn">▶ Play</button>
+  </div>
+
+  <div class="card" data-game="games/Bad Ice Cream 2.html">
+    <img src="images/Bad Ice Cream 2.png" alt="Game 3" class="card-img">
+    <div class="text">Bad Ice Cream 2</div>
+    <button class="play-btn">▶ Play</button>
+  </div>
+
+  <div class="card" data-game="games/Bad Ice Cream 3.html">
+    <img src="images/Bad Ice Cream 3.png" alt="Game 3" class="card-img">
+    <div class="text">Bad Ice Cream 3</div>
+    <button class="play-btn">▶ Play</button>
+  </div>
+
+  <div class="card" data-game="games/64 in 1 NES.html">
+    <img src="images/64 in 1 NES.png" alt="Game 3" class="card-img">
+    <div class="text">64 in 1 NES</div>
+    <button class="play-btn">▶ Play</button>
+  </div>
+
+  <div class="card" data-game="games/Geometry Dash World.html">
+    <img src="images/Geometry Dash World.webp" alt="Game 3" class="card-img">
+    <div class="text">GD World</div>
+    <button class="play-btn">▶ Play</button>
+  </div>
+
+  <div class="card" data-game="games/WebFishing.html">
+    <img src="images/WebFishing.png" alt="Game 3" class="card-img">
+    <div class="text">WebFishing</div>
+    <button class="play-btn">▶ Play</button>
+  </div>
+
+  <div class="card" data-game="games/BlackJack.html">
+    <img src="images/BlackJack.png" alt="Game 3" class="card-img">
+    <div class="text">BlackJack</div>
+    <button class="play-btn">▶ Play</button>
+  </div>
+
+  <div class="card" data-game="games/Block Blast.html">
+    <img src="images/Block Blast.png" alt="Game 3" class="card-img">
+    <div class="text">Block Blast</div>
+    <button class="play-btn">▶ Play</button>
+  </div>
+
+  <div class="card" data-game="games/Bank Robbery 2.html">
+    <img src="images/Bank Robbery 2.png" alt="Game 3" class="card-img">
+    <div class="text">Bank Robbery 2</div>
+    <button class="play-btn">▶ Play</button>
+  </div>
+
+   <div class="card" data-game="games/Bank Robbery 3.html">
+    <img src="images/Bank Robbery 3.png" alt="Game 3" class="card-img">
+    <div class="text">Bank Robbery 3</div>
+    <button class="play-btn">▶ Play</button>
+  </div>
+
+  <div class="card" data-game="games/Basketball Stars.html">
+    <img src="images/Basketball Stars.png" alt="Game 3" class="card-img">
+    <div class="text">Basketball Stars</div>
+    <button class="play-btn">▶ Play</button>
+  </div>
+
+   <div class="card" data-game="games/Crazy Cattle 3D.html">
+    <img src="images/Crazy Cattle 3D.png" alt="Game 3" class="card-img">
+    <div class="text">Crazy Cattle 3D</div>
+    <button class="play-btn">▶ Play</button>
+  </div>
+
+  <div class="card" data-game="games/Cut the Rope.html">
+    <img src="images/Cut the Rope.png" alt="Game 3" class="card-img">
+    <div class="text">Cut the Rope</div>
+    <button class="play-btn">▶ Play</button>
+  </div>
+
+  <div class="card" data-game="games/Dadish.html">
+    <img src="images/Dadish.png" alt="Game 3" class="card-img">
+    <div class="text">Dadish</div>
+    <button class="play-btn">▶ Play</button>
+  </div>
+
+  <div class="card" data-game="games/Doodle Jump.html">
+    <img src="images/Doodle Jump.png" alt="Game 3" class="card-img">
+    <div class="text">Doodle Jump</div>
+    <button class="play-btn">▶ Play</button>
+  </div>
+
+  <div class="card" data-game="games/DOOM.html">
+    <img src="images/DOOM.png" alt="Game 3" class="card-img">
+    <div class="text">DOOM</div>
+    <button class="play-btn">▶ Play</button>
+  </div>
+
+  <div class="card" data-game="games/Draw Joust.html">
+    <img src="images/Draw Joust.png" alt="Game 3" class="card-img">
+    <div class="text">Draw Joust</div>
+    <button class="play-btn">▶ Play</button>
+  </div>
+
+  <div class="card" data-game="games/Drift Boss.html">
+    <img src="images/Drift Boss.png" alt="Game 3" class="card-img">
+    <div class="text">Drift Boss</div>
+    <button class="play-btn">▶ Play</button>
+  </div>
+
+  <div class="card" data-game="games/Five Nights at Freddys 2.html">
+    <img src="images/Five Nights at Freddys 2.png" alt="Game 3" class="card-img">
+    <div class="text">Five Nights at Freddys 2</div>
+    <button class="play-btn">▶ Play</button>
+  </div>
+
+  <div class="card" data-game="games/Five Nights at Freddys 3.html">
+    <img src="images/Five Nights at Freddys 3.png" alt="Game 3" class="card-img">
+    <div class="text">Five Nights at Freddys 3</div>
+    <button class="play-btn">▶ Play</button>
+  </div>
+
+  <div class="card" data-game="games/Five Nights at Freddys 4  Halloween.html">
+    <img src="images/Five Nights at Freddys 4  Halloween.png" alt="Game 3" class="card-img">
+    <div class="text">FNAF 4  Halloween</div>
+    <button class="play-btn">▶ Play</button>
+  </div>
+
+  <div class="card" data-game="games/Five Nights at Freddys 4.html">
+    <img src="images/Five Nights at Freddys 4.png" alt="Game 3" class="card-img">
+    <div class="text">Five Nights at Freddys 4</div>
+    <button class="play-btn">▶ Play</button>
+  </div>
+
+  <div class="card" data-game="games/Five Nights at Freddys Pizza Simulator.html">
+    <img src="images/Five Nights at Freddys Pizza Simulator.png" alt="Game 3" class="card-img">
+    <div class="text">FNAF Pizza Simulator</div>
+    <button class="play-btn">▶ Play</button>
+  </div>
+
+  <div class="card" data-game="games/Five Nights at Freddys Sister Location.html">
+    <img src="images/Five Nights at Freddys Sister Location.png" alt="Game 3" class="card-img">
+    <div class="text">FNAF Sister Location</div>
+    <button class="play-btn">▶ Play</button>
+  </div>
+
+  <div class="card" data-game="games/Five Nights at Freddys.html">
+    <img src="images/Five Nights at Freddys.png" alt="Game 3" class="card-img">
+    <div class="text">Five Nights at Freddys</div>
+    <button class="play-btn">▶ Play</button>
+  </div>
+
+  <div class="card" data-game="games/Five Nights at Freddy's_ Ultimate Custom Night.html">
+    <img src="images/Five Nights at Freddys Ultimate Custom Night.png" alt="Game 3" class="card-img">
+    <div class="text">Five Nights at Freddys Ultimate Custom Night</div>
+    <button class="play-btn">▶ Play</button>
+  </div>
+
+
+<div class="iframe-overlay">
+  <div class="iframe-buttons">
+    <button id="back-btn">← Back</button>
+    <button id="fullscreen-btn">⛶ Fullscreen</button>
+    <button id="blank-btn">🕶 Open in new tab</button>
+  </div>
+  <iframe class="game-iframe" src=""></iframe>
+</div>
+
+
+<div class="bottom-sidebar">
+    <div class="nav-icon" data-page="index.html">🏠</div>
+    <div class="nav-icon" data-page="games.html">🎮</div>
+   <div class="nav-icon" data-page="movies.html">🎬</div>
+    <div class="nav-icon" data-page="ai.html">🤖</div>
+    <div class="nav-icon" data-page="proxy.html">🌐</div>
+    <div class="nav-icon" data-page="settings.html">⚙</div>
+</div>
+ 
+<script>
+const cards = document.querySelectorAll('.card');
+const overlay = document.querySelector('.iframe-overlay');
+const iframe = document.querySelector('.game-iframe');
+const backBtn = document.getElementById('back-btn');
+const fullscreenBtn = document.getElementById('fullscreen-btn');
+const blankBtn = document.getElementById('blank-btn');
+
+
+cards.forEach(card => {
+  const playBtn = card.querySelector('.play-btn');
+  playBtn.addEventListener('click', (e)=>{
+    e.stopPropagation();
+    iframe.src = card.dataset.game;
+    overlay.style.display='flex';
+  });
+});
+
+
+backBtn.addEventListener('click', ()=>{
+  overlay.style.display='none';
+  iframe.src='';
+});
+
+
+fullscreenBtn.addEventListener('click', ()=>{
+  if(iframe.requestFullscreen) iframe.requestFullscreen();
+  else if(iframe.webkitRequestFullscreen) iframe.webkitRequestFullscreen();
+  else if(iframe.msRequestFullscreen) iframe.msRequestFullscreen();
+});
+
+
+blankBtn.addEventListener('click', ()=>{
+  const currentGame = iframe.src;
+  if(currentGame) window.open(currentGame, '_blank');
+});
+
+document.querySelectorAll('.bottom-sidebar .nav-icon').forEach(icon => {
+
+    const currentPage = window.location.pathname.split("/").pop();
+
+    if (icon.dataset.page === currentPage) {
+        icon.classList.add("active");
+    }
+
+    icon.addEventListener('click', () => {
+        const page = icon.dataset.page;
+        if (page) {
+            window.location.href = "/" + page;
+        }
+    });
+
+});
+</script>
+  
+<script src="nrg-system.js"></script>
+<script>
+  addXP(25);
+  addCoins(5)
+  addProgress("gamesPlayed");
+</script>
+  
+ <script src="index.js"></script>
+
+</body>
+</html>
